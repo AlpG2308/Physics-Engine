@@ -16,26 +16,25 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, color, [x_coor//2, y_coor//2],radius)
         self.rect = self.image.get_rect()
         self.screen = screen
-        self.rect.center = (self.screen.get_width()//2,0+radius)#Pos at time = 0
-        self.prev_pos = [self.screen.get_width()/2,0+radius-5]
-        self.acc = 9.81
+        self.rect.center = (self.screen.get_width()//2,0+radius+10)#Pos at time = 0
+        self.prev_pos = [self.screen.get_width()/2,0+radius-10]
+        self.acc = 1 #pygame rect class only accepts integers so only integer values are possible
 
     def update(self):
-        new_posy = int(2 * self.rect.centery - self.prev_pos[1] + self.acc * 0.5*0.5)
-        new_posx = int(2 * self.rect.centerx - self.prev_pos[0] + 0 * 0.5*0.5)
-        v_y = new_posy - self.prev_pos[1]
-        v_x = new_posx - self.prev_pos[0]
-        print(self.rect.centery, new_posy, self.prev_pos[1], v_y)
-        self.prev_pos[0] = new_posx
-        self.prev_pos[1] = new_posy
-        self.rect.center = (new_posx,new_posy)
-        if self.rect.bottom > self.screen.get_height():
-            new_posy = self.screen.get_height()
-            self.rect.bottom= new_posy
-            self.prev_pos[1] = new_posy + v_y*0.5
-            self.acc *= -1
-        if self.rect.top < 0:
-            new_posy = 0
-            self.prev_pos[1] = new_posy + v_y*0.5
-            self.acc *= -1
+        v_y = self.rect.centery - self.prev_pos[1]
+        v_x = self.rect.centerx - self.prev_pos[0]
+        self.prev_pos[0] = self.rect.centerx
+        self.prev_pos[1] = self.rect.centery
+        p_y = float(self.rect.centery + v_y)
+        p_x = float(self.rect.centerx + v_x)
+        p_y += self.acc
+        print(self.rect.centery, self.prev_pos[1],v_y, v_x)
+        self.rect.center=(p_x,p_y)
+
+        if self.rect.centery >= self.screen.get_height():
+            self.rect.centery = self.screen.get_height()
+            self.prev_pos[1] = self.rect.centery + v_y*0.9
+        if self.rect.centery <= 0.0:
+            self.rect.centery = 0
+            self.prev_pos[1] = self.rect.centery + v_y*0.9
 
