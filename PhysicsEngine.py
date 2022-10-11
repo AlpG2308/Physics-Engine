@@ -1,5 +1,5 @@
 import pygame
-from Object import Ball
+from Object import Ball,Mesh
 
 pygame.init()
 
@@ -14,18 +14,24 @@ def main():
     screen.blit(background,(0,0))
 
 
-    ball = Ball(White,20,20,10,screen)
+#    mesh = Mesh(White,20,20,10,10,screen)
     all_sprite_list = pygame.sprite.Group()
-    all_sprite_list.add(ball)
+    all_sprite_list.add(mesh)
     clock = pygame.time.Clock()
     running = True
+    acc = 9.81
     ##Window Loop
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif pygame.mouse.get_pressed()[0]:
+                mouse_pos= pygame.mouse.get_pos()
+                new_ball = Ball(White,mouse_pos[0],mouse_pos[1],10,screen)
+                all_sprite_list.add(new_ball)
+
         all_sprite_list.clear(screen,background)
-        all_sprite_list.update()
+        all_sprite_list.update(acc)
         all_sprite_list.draw(screen)
         pygame.display.flip()
         clock.tick(60)
