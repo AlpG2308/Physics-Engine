@@ -13,10 +13,18 @@ def main():
     background.fill(Black)
     screen.blit(background,(0,0))
 
+    all_sprite_list = pygame.sprite.Group()
+    ## For Mesh creation
+    ## create ball group -> nodes of Mesh
+    ## create line group -> Edges of mesh
+    ## loop through mesh matrix and add edges and nodes
+    
+    for i in range (10,300,100):
+        ball  = Ball(White, i,20, 10,screen)
+        all_sprite_list.add(ball)
 
 #    mesh = Mesh(White,20,20,10,10,screen)
-    all_sprite_list = pygame.sprite.Group()
-    all_sprite_list.add(mesh)
+
     clock = pygame.time.Clock()
     running = True
     acc = 9.81

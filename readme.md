@@ -8,6 +8,8 @@
 + [x] Implement Simple Bouncing Ball Physics
 + [ ] Mesh Simulation
 
+For the mesh creation the nodes can be represented by the Ball class and a line class needs to be created which will represent the edges of the mesh. Connecting the Edgeds left and tight outer coordinates to the node center coordinates should create a position constrained mesh object.
+
 ---
 
 ## Verlet Integrator
