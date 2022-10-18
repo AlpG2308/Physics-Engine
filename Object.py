@@ -17,8 +17,8 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.screen = screen
         self.rect.center = (self.screen.get_width()//2,0+radius+10)#Pos at time = 0
-        self.prev_pos = [self.screen.get_width()/2,0+radius]
-        self.acc = 10 * (1/60 * 2.5**2) #pygame rect class only accepts integers so only integer values are possible -> a*delta_t**2
+        self.prev_pos = [self.screen.get_width()/2 + 10,0+radius+10]
+        self.acc = 10 * (1/60 * 2.5**2)#pygame rect class only accepts integers so only integer values are possible -> a*delta_t**2
                                     # use 1/60 to adjust for framerate
 
     def update(self):
@@ -32,10 +32,21 @@ class Ball(pygame.sprite.Sprite):
         print(self.rect.centery, self.prev_pos[1],v_y, v_x,self.acc)
         self.rect.center=(p_x,p_y)
 
-        if self.rect.centery + self.radius>= self.screen.get_height()-self.radius:
-            self.rect.centery = self.screen.get_height()-self.radius
-            self.prev_pos[1] = self.rect.centery + v_y*0.9
+        #Top and bottom constraints
+        if self.rect.centery + self.radius >= self.screen.get_height() - self.radius:
+            self.rect.centery = self.screen.get_height() - self.radius
+            self.prev_pos[1] = self.rect.centery + v_y * 0.9
+
         if self.rect.centery - self.radius <= 0 + self.radius:
             self.rect.centery = 0+self.radius
-            self.prev_pos[1] = self.rect.centery + v_y*0.9
+            self.prev_pos[1] = self.rect.centery + v_y * 0.9
 
+        #Left Right Constraints
+
+        if self.rect.centerx - self.radius >= self.screen.get_width() - self.radius:
+            self.rect.centerx = self.screen.get_width() - self.radius
+            self.prev_pos[0] = self.rect.centerx + v_x * 0.9
+
+        if self.rect.centerx + self.radius <= 0 +self.radius:
+            self.rect.centerx = 0 + self.radius
+            self.prev_pos[0] = self.rect.centerx + v_x * 0.9
