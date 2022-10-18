@@ -18,7 +18,42 @@ $$x(t+\Delta t) = 2*x(t) - x(t-\Delta t)+a\Delta t^2$$
 
 In the `Object.py` file the propagation of the particle is done in the `update()` function.
 
-The previous position of the particle was chosen to be smaller than the initial postion of the circle and stored in the `self.prev_pos` list. Position [0] contains the x coordinate and position [1] the y coordinate.
+```python
+def update(self):
+    v_y = int(self.rect.centery - self.prev_pos[1])
+    v_x = int(self.rect.centerx - self.prev_pos[0])
+    self.prev_pos[0] = self.rect.centerx
+    self.prev_pos[1] = self.rect.centery
+    p_y = self.rect.centery + v_y
+    p_x = self.rect.centerx + v_x
+    p_y += self.acc
+    self.rect.center=(p_x,p_y)
+```
+
+The previous position of the particle are stored in a list `self.prev_pos` with `self.prev_pos[0]` being the x position
+and `self.prev_pos[1]` the y position. The verlet algorithm is implemented over several steps. First `v_y` and `v_x`
+are calculated which is given as the change in x/y position over a given timestep (`clock.tick(60)`). This can be added to
+the current position which is further summed with the acceleration yielding the next position. In the next step
+the prev_position list will be updated as well as the current position of our particle.
+The previous can be chosen to be smaller than the initial position to give the particles 
+an inital velocity.
+
+Splitting the verlet algorithm that way makes it possible to adjust for the boundary constraints in the later step.
+
+As shown below:
+
+```python
+def update(self):
+    
+    [...]
+    
+    if self.rect.centery + self.radius>= self.screen.get_height()-self.radius:
+    self.rect.centery = self.screen.get_height()-self.radius
+    self.prev_pos[1] = self.rect.centery + v_y*0.9
+    if self.rect.centery - self.radius <= 0 + self.radius:
+    self.rect.centery = 0+self.radius
+    self.prev_pos[1] = self.rect.centery + v_y*0.9
+```
 
 ### Propagation
 
@@ -33,6 +68,6 @@ If the boundary conditions are met the particle will be set to a base value and 
 
 ## Pygame
 
-Pygame has a few notable "features" first of all are all the positions of the rectangles stored as integere values. Float values wont have an impact in the over positions of the rectangle. Furthermore, would the use of of the bottom or the top of the rectangle at the boundary be more sensible but currently the code only works with center value. The reason for that will be investigated in the future.
+Pygame has a few notable "features". First of all are the positions of the rectangles stored as integere values. Float values wont have an impact in the over positions of the rectangle. Furthermore, would the use of of the bottom or the top of the rectangle at the boundary be more sensible but currently the code only works with center value. The reason for that will be investigated in the future.
 
 
