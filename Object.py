@@ -18,7 +18,7 @@ class Ball(pygame.sprite.Sprite):
         self.screen = screen
         self.rect.center = (self.screen.get_width()//2,0+radius+10)#Pos at time = 0
         self.prev_pos = [self.screen.get_width()/2,0+radius]
-        self.acc = 10 * (0.5*0.5) #pygame rect class only accepts integers so only integer values are possible -> a*delta_t**2
+        self.acc = 10 * (1/60 * 2.5**2) #pygame rect class only accepts integers so only integer values are possible -> a*delta_t**2
                                     # use 1/60 to adjust for framerate
 
     def update(self):
